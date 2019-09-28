@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 Route::get('/insert', function() {
     $user = User::findOrFail(1);
-    $role = new Role(['name' => 'Administrator']);
+    $role = new Role(['name' => 'User']);
 
     $user->roles()->save($role);
 });
@@ -51,6 +51,27 @@ Route::get('/delete', function() {
 
     // $user->roles()->delete(); // delete all rows
     foreach($user->roles as $role) { // delete row
-        $role->whereId(1)->delete();
+        $role->whereId(3)->delete();
     }
+});
+
+// attach role to user
+Route::get('/attach', function() {
+    $user = User::findOrFail(1);
+
+    $user->roles()->attach(4);
+});
+
+// detach a role from user
+Route::get('/detach', function() {
+    $user = User::findOrFail(1);
+
+    $user->roles()->detach(4);
+});
+
+// only attach to the specified role, but detach all other role that's not specified
+Route::get('/sync', function() {
+    $user = User::findOrFail(1);
+
+    $user->roles()->sync([1]);
 });
