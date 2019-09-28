@@ -11,6 +11,46 @@
 |
 */
 
+use App\User;
+use App\Role;
+
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/insert', function() {
+    $user = User::findOrFail(1);
+    $role = new Role(['name' => 'Administrator']);
+
+    $user->roles()->save($role);
+});
+    
+Route::get('/update', function() {
+    $user = User::findOrFail(1);
+
+    if($user->has('roles')) {
+        foreach($user->roles as $role) {
+            if($role->name == 'Administrator') {
+                $role->name = 'admin';
+                $role->save();
+            }
+        }
+    }
+});
+    
+Route::get('/read', function() {
+    $user = User::findOrFail(1);
+
+    foreach($user->roles as $role) {
+        echo $role->name;
+    }
+});
+    
+Route::get('/delete', function() {
+    $user = User::findOrFail(1);
+
+    // $user->roles()->delete(); // delete all rows
+    foreach($user->roles as $role) { // delete row
+        $role->whereId(1)->delete();
+    }
 });
