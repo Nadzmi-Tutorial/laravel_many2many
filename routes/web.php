@@ -19,10 +19,16 @@ Route::get('/', function () {
 });
 
 Route::get('/insert', function() {
-    $user = User::findOrFail(1);
-    $role = new Role(['name' => 'User']);
+    $admin = User::findOrFail(1);
+    $user = User::findOrFail(2);
 
-    $user->roles()->save($role);
+    $roleAdmin1 = new Role(['name' => 'Admin 1']);
+    $roleAdmin2 = new Role(['name' => 'Admin 2']);
+    $roleUser = new Role(['name' => 'User']);
+
+    $admin->roles()->save($roleAdmin1);
+    $admin->roles()->save($roleAdmin2);
+    $user->roles()->save($roleUser);
 });
     
 Route::get('/update', function() {
@@ -53,6 +59,12 @@ Route::get('/delete', function() {
     foreach($user->roles as $role) { // delete row
         $role->whereId(3)->delete();
     }
+});
+ 
+Route::get('/delete-user', function() {
+    $admin = User::findOrFail(1);
+    
+    $admin->delete();
 });
 
 // attach role to user
